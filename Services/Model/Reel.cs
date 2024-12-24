@@ -8,6 +8,7 @@ public class Reel(IEnumerable<Symbol> symbols)
     {
         var maxPos = _symbols.Count;
         var threadLocalRandom = new ThreadLocal<Random>(() => seed.HasValue ? new Random(seed.Value): new Random());
+        if (threadLocalRandom.Value == null) throw new ApplicationException();
         var pos = threadLocalRandom.Value.Next(maxPos);
 
         return _symbols[pos];

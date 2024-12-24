@@ -1,17 +1,21 @@
-﻿namespace Client;
+﻿using Services;
 
-public class App(Ilogger logger)
+namespace Client;
+
+public class App(ILoggingService logService, ISlotMachineService slotMachineService)
 {
-    private readonly ILogger _logger = logger;
-        
-    public readonly long CurrentBalance { get; private set; }
-    public readonly long Spins { get; private set; }
+    private readonly ILoggingService _logService = logService;
+    private readonly ISlotMachineService _slotMachineService = slotMachineService;
     
-    public readonly long Bet { get, private set; }
-
-    public Task Run()
+    public void Run()
     {
-        seed = Guid.NewGuid().GetHashCode();
-        throw new NotImplementedException();
+        var seed = Guid.NewGuid().GetHashCode();
+        
+        Console.WriteLine(seed);
+    }
+
+    private void GetUserInput()
+    {
+        
     }
 }

@@ -1,5 +1,4 @@
-﻿using System.Net.Sockets;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Services.Exceptions;
 using Services.Model;
 
@@ -7,41 +6,44 @@ namespace Services;
 
 public class SlotMachineService: ISlotMachineService
 {
-    private static Lazy<List<Reel>> _reels;
-    private static Lazy<List<Payout>> _payouts;
+    private readonly List<Reel> _reels;
+    private readonly List<Payout> _payouts;
     public SlotMachineService(IOptions<SlotMachineOptions> options)
     {
- 
-        try
+            _reels = (options.Value.Reels ?? throw new ConfigurationException())
+                .Select(r => new Reel(r)).ToList();
+            _payouts = (options.Value.Payouts ?? throw new ConfigurationException())
+                .Select(p => p).ToList();
+    }
+    public SpinResult Spin(int? seed)
+    {
+        var result = _reels
+            .AsParallel()
+            .AsOrdered()
+            .Select(x => x.Spin(seed))
+            .ToList();
+        
+        var isWin = IsWin(result);
+        var payout = isWin ? CalculatePayout(result[0]) : 0;
+
+        return new SpinResult
         {
-            foreach (var reel in options.Value.Reels)
-            {
-     
-                    var symbols = reel.Select(x => x).ToList();
-                    _reels.Value.Add(new Reel(symbols));
-                
-            }
-
-            _payouts.Value.AddRange(options.Value.Payouts.ToList());
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e);
-            throw new ConfigurationException();
-        }
-    }
-    public async Task<SpinResult> Spin(int? seed)
-    {
-        throw new NotImplementedException();
+            Symbols = result,
+            Payout = payout,
+        };
     }
 
-    public long CalculatePayout(SpinResult spinResult)
-    {
-        throw new NotImplementedException();
+    public bool IsWin(IEnumerable<Symbol> symbols)
+    { 
+        var filtered = symbols.Where(f => f != Symbol.Wild).ToList();
+        
+        return filtered.TrueForAll(f => f == filtered[0]) || filtered.Count == 0;
     }
 
-    private SpinResult SpinReels()
+    public long CalculatePayout(Symbol symbol)
     {
-        throw new NotImplementedException();  
+        return _payouts
+            .First(y => y.Symbol == symbol).Amount;
     }
+
 }

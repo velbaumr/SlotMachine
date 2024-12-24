@@ -4,6 +4,8 @@ namespace Services;
 
 public interface ISlotMachineService
 {
-    Task<SpinResult> Spin(int? seed);
-    long CalculatePayout(SpinResult spinResult);
+    SpinResult Spin(int? seed);
+    long CalculatePayout(Symbol symbol);
+
+    bool IsWin(IEnumerable<Symbol> symbols);
 }
