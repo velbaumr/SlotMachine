@@ -1,4 +1,6 @@
-﻿namespace Services.Model;
+﻿using System.ComponentModel;
+
+namespace Services.Model;
 
 public enum Symbol
 {
@@ -7,3 +9,4 @@ public enum Symbol
     Bar,
     Wild
 }
+

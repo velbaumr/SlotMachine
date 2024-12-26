@@ -2,7 +2,7 @@
 
 public class SpinResult
 {
-    public List<Symbol>? Symbols { get; set; }
+    public required List<Symbol> Symbols { get; set; }
     
     public long Payout { get; set; }
 }

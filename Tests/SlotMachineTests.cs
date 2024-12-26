@@ -15,18 +15,24 @@ public class SlotMachineTests
                 new List<Symbol>
                 {
                     Symbol.Bar, Symbol.Cherry, Symbol.Bar, Symbol.Bar, Symbol.Bar, Symbol.Bar,
-                    Symbol.Bar, Symbol.Bar, Symbol.Cherry, Symbol.Bar, Symbol.Bar, Symbol.Sevens
-                    
+                    Symbol.Bar, Symbol.Cherry, Symbol.Bar, Symbol.Bar, Symbol.Sevens, Symbol.Cherry,
+                    Symbol.Cherry, Symbol.Cherry, Symbol.Bar, Symbol.Bar, Symbol.Cherry, Symbol.Bar,
+                    Symbol.Cherry, Symbol.Bar, Symbol.Wild
                 },
                 new List<Symbol>
                 {
                     Symbol.Bar, Symbol.Bar, Symbol.Bar, Symbol.Bar, Symbol.Cherry, Symbol.Bar,
-                    Symbol.Bar, Symbol.Bar, Symbol.Sevens, Symbol.Bar, Symbol.Bar, Symbol.Sevens
+                    Symbol.Bar,  Symbol.Sevens, Symbol.Bar, Symbol.Bar, Symbol.Cherry, Symbol.Cherry,
+                    Symbol.Sevens, Symbol.Bar, Symbol.Bar, Symbol.Bar, Symbol.Bar, Symbol.Cherry,
+                    Symbol.Bar, Symbol.Cherry, Symbol.Wild
+                    
                 },
                 new List<Symbol>
                 {
                     Symbol.Sevens, Symbol.Cherry, Symbol.Bar, Symbol.Cherry, Symbol.Bar, Symbol.Bar,
-                    Symbol.Bar, Symbol.Cherry, Symbol.Cherry, Symbol.Bar, Symbol.Bar, Symbol.Bar
+                    Symbol.Bar, Symbol.Cherry, Symbol.Bar, Symbol.Bar, Symbol.Cherry, Symbol.Bar,
+                    Symbol.Bar, Symbol.Cherry, Symbol.Cherry, Symbol.Bar, Symbol.Bar, Symbol.Bar,
+                    Symbol.Cherry, Symbol.Bar, Symbol.Wild
                 }
             ],
             Payouts = [

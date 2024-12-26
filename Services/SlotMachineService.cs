@@ -15,12 +15,12 @@ public class SlotMachineService: ISlotMachineService
             _payouts = (options.Value.Payouts ?? throw new ConfigurationException())
                 .Select(p => p).ToList();
     }
-    public SpinResult Spin(int? seed)
+    public SpinResult Spin()
     {
         var result = _reels
             .AsParallel()
             .AsOrdered()
-            .Select(x => x.Spin(seed))
+            .Select(x => x.Spin(Guid.NewGuid().GetHashCode()))
             .ToList();
         
         var isWin = IsWin(result);
