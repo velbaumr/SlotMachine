@@ -24,7 +24,9 @@ public class SlotMachineService: ISlotMachineService
             .ToList();
         
         var isWin = IsWin(result);
-        var payout = isWin ? CalculatePayout(result[0]) : 0;
+        var filtered = result.Where(f => f != Symbol.Wild).ToList();
+        var winningSymbol = filtered.Count == 0 ? Symbol.Wild : filtered[0];
+        var payout = isWin ? CalculatePayout(winningSymbol) : 0;
 
         return new SpinResult
         {

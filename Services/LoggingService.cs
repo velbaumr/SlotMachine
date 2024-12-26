@@ -27,8 +27,8 @@ public class LoggingService : ILoggingService
 
     private static Symbol GetWinningSymbol(IEnumerable<Symbol> symbols)
     {
-        var filtered = symbols.Where(f => f != Symbol.Wild).ToList();
-        return filtered.Count == 0 ? Symbol.Wild : filtered.First();
+        var filtered = symbols.Where(s => s != Symbol.Wild).ToList();
+        return filtered.Count == 0 ? Symbol.Wild : filtered[0];
     }
     private static string ToSymbolString(Symbol symbol)
     {

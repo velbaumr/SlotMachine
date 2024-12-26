@@ -12,22 +12,26 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
 
         var results = new List<SpinResult>();
 
-
         var balance = userInput.StartBalance;
 
         for (var i = 0; i < userInput.SpinCount; i++)
         {
             var result = slotMachineService.Spin();
+            
             balance = slotMachineService.IsWin(result.Symbols)
                 ? balance + userInput.Bet * result.Payout
                 : balance - userInput.Bet;
+            
             results.Add(result);
+            
             var logData = new LogData
             {
                 Result = result,
                 SpinCount = i,
-                Balance = balance
+                Balance = balance,
+                Bet =  userInput.Bet
             };
+            
             logService.LogSpinResult(logData);
 
             if (balance < userInput.Bet) break;
