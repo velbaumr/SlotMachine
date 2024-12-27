@@ -1,4 +1,5 @@
-﻿using Services;
+﻿using Microsoft.Extensions.Logging.Console;
+using Services;
 using Services.Model;
 using Services.Validators;
 
@@ -52,9 +53,9 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
 
         while (!isValid)
         {
-            userInput.Bet = GetInput("Bet:", 0);
-            userInput.StartBalance = GetInput("Balance:", 0);
-            userInput.SpinCount = GetInput("Spin:", 0);
+            userInput.StartBalance = GetInput("Starting balance (in cents):", 1);
+            userInput.Bet = GetInput("Bet (in cents):", 1);
+            userInput.SpinCount = GetInput("Number of spins to play:", 1);
 
             var validationResult = userInputValidator.Validate(userInput);
             isValid = validationResult.IsValid;
@@ -72,8 +73,20 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
 
     private static long GetInput(string prompt, int minValue)
     {
-        Console.Write(prompt);
+        var parseResult = false;
+        long result = 0;
 
-        return long.Parse(Console.ReadLine());
+        while (!(parseResult && result >= minValue))
+        {
+            Console.WriteLine(prompt);
+            var promptValue = Console.ReadLine();
+            parseResult = long.TryParse(promptValue, out result);
+            if (result < minValue)
+            {
+                Console.WriteLine("Please enter a number bigger or equal than {0}", minValue);
+            }
+        }
+        
+        return result;
     }
 }
