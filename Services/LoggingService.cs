@@ -26,7 +26,7 @@ public class LoggingService : ILoggingService
         Console.WriteLine();
     }
 
-    public void LogSummary(IEnumerable<SpinResult> spinResults, IEnumerable<Multiplier> payouts, long totalWin,
+    public void LogSummary(IEnumerable<SpinResult> spinResults, IEnumerable<Multiplier> multipliers, long totalWin,
         long totalBet, long totalSpins, long bet)
     {
         var rtp = (int)(totalBet / (double)totalWin * 100);
@@ -38,14 +38,14 @@ public class LoggingService : ILoggingService
             .GroupBy(x => x.WinningSymbol)
             .ToList();
 
-        foreach (var payout in payouts)
+        foreach (var multiplier in multipliers)
         {
-            var data = groupedWins.SingleOrDefault(x => x.Key == payout.Symbol);
+            var data = groupedWins.SingleOrDefault(x => x.Key == multiplier.Symbol);
             var count = data?.Count() ?? 0;
-            var win = count * payout.Amount * bet;
+            var win = count * multiplier.Amount * bet;
             var plural = count > 1 ? "s" : "";
 
-            Console.WriteLine($"{ToSymbolString(payout.Symbol)} - {count} hit{plural}, Total win: {win}");
+            Console.WriteLine($"{ToSymbolString(multiplier.Symbol)} - {count} hit{plural}, Total win: {win}");
         }
     }
 
