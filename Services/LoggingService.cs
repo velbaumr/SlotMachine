@@ -32,7 +32,7 @@ public class LoggingService : ILoggingService
 
     public void LogSummary(IEnumerable<SpinResult> spinResults, IEnumerable<Multiplier> payouts, long totalWin, long totalBet, long totalSpins, long bet)
     {
-        var rtp = (int)(totalWin / (double)totalBet * 100);
+        var rtp = (int)(totalBet / (double)totalWin * 100);
         Console.WriteLine($"RTP: {rtp}%, Spins: {totalSpins}, Total bet: {totalBet}, Total win: {totalWin}");
         Console.WriteLine();
    
