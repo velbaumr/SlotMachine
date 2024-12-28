@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging.Console;
-using Services;
+﻿using Services;
 using Services.Model;
 using Services.Validators;
 
@@ -10,25 +9,25 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
     public void Run()
     {
         var userInput = GetUserInput();
-
+        int spinCounter;
         var results = new List<SpinResult>();
-
         var balance = userInput.StartBalance;
 
-        for (var i = 0; i < userInput.SpinCount; i++)
+        for (spinCounter = 0; spinCounter < userInput.SpinCount; spinCounter++)
         {
             var result = slotMachineService.Spin();
+            var isWin = slotMachineService.IsWin(result.Symbols);
             
-            balance = slotMachineService.IsWin(result.Symbols)
+            balance = isWin
                 ? balance + userInput.Bet * result.Payout
                 : balance - userInput.Bet;
-            
+
             results.Add(result);
             
             var logData = new LogData
             {
                 Result = result,
-                SpinCount = i,
+                SpinCount = spinCounter,
                 Balance = balance,
                 Bet =  userInput.Bet
             };
@@ -37,10 +36,11 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
 
             if (balance < userInput.Bet) break;
         }
-
-        logService.LogSummary(results);
-
-
+        
+        var totalWin = balance - userInput.StartBalance;
+        
+        logService.LogSummary(results, slotMachineService.Configuration, totalWin, spinCounter * userInput.Bet, spinCounter, userInput.Bet);
+        
         Console.WriteLine("press any key to exit...");
         Console.ReadKey();
     }
@@ -67,7 +67,8 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
                 Console.WriteLine(message.ErrorMessage);
             }
         }
-
+        Console.WriteLine();
+        
         return userInput;
     }
 

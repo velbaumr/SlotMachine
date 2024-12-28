@@ -22,7 +22,7 @@ public class LoggingService : ILoggingService
         
         Console.WriteLine(builder.ToString());
         Console.WriteLine(resultText);
-        Console.WriteLine(string.Empty);
+        Console.WriteLine();
     }
 
     private static Symbol GetWinningSymbol(IEnumerable<Symbol> symbols)
@@ -35,7 +35,22 @@ public class LoggingService : ILoggingService
         return symbol == Symbol.Sevens ? "777" : symbol.ToString();
     }
 
-    public void LogSummary(IEnumerable<SpinResult> spinResults)
+    public void LogSummary(IEnumerable<SpinResult> spinResults, IEnumerable<Payout> payouts, long totalWin, long totalBet, long totalSpins, long bet)
     {
+        var rtp = (int)(totalBet / (double)totalWin * 100);
+        Console.WriteLine($"RTP: {rtp}%, Spins: {totalSpins}, Total bet: {totalBet}, Total win: {totalWin}");
+        Console.WriteLine();
+        var wins = spinResults.Where(x => x.WinningSymbol != null);
+        var groupedWins = wins.GroupBy(x => x.WinningSymbol).ToList();
+
+        foreach (var payout in payouts)
+        {
+            var data = groupedWins.SingleOrDefault(x => x.Key == payout.Symbol);
+            var count = data?.Count() ?? 0;
+            var win = count * payout.Amount * bet;
+            var plural = count > 1 ? "s" : "";
+            
+            Console.WriteLine($"{ToSymbolString(payout.Symbol)} - {count} hit{plural}, Total win: {win}");
+        }
     }
 }

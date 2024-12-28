@@ -6,8 +6,8 @@ namespace Services;
 
 public class SlotMachineService: ISlotMachineService
 {
-    private readonly List<Reel> _reels;
-    private readonly List<Payout> _payouts;
+    private readonly IEnumerable<Reel> _reels;
+    private readonly IEnumerable<Payout> _payouts;
     public SlotMachineService(IOptions<SlotMachineOptions> options)
     {
             _reels = (options.Value.Reels ?? throw new ConfigurationException())
@@ -32,6 +32,7 @@ public class SlotMachineService: ISlotMachineService
         {
             Symbols = result,
             Payout = payout,
+            WinningSymbol = isWin ? winningSymbol : null,
         };
     }
 
@@ -41,6 +42,8 @@ public class SlotMachineService: ISlotMachineService
         
         return filtered.TrueForAll(f => f == filtered[0]) || filtered.Count == 0;
     }
+
+    public IEnumerable<Payout> Configuration => _payouts;
 
     public long CalculatePayout(Symbol symbol)
     {

@@ -8,4 +8,6 @@ public interface ISlotMachineService
     long CalculatePayout(Symbol symbol);
 
     bool IsWin(IEnumerable<Symbol> symbols);
+    
+    IEnumerable<Payout> Configuration { get; }
 }
