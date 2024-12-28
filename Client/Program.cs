@@ -8,13 +8,13 @@ var configuration = new ConfigurationBuilder()
     .SetBasePath(Path.Combine(AppContext.BaseDirectory))
     .AddJsonFile("appsettings.json", true, true)
     .Build();
-    
+
 var services = new ServiceCollection()
-                                    .Configure<SlotMachineOptions>(options => configuration.GetSection("SlotOptions").Bind(options))
-                                    .AddSingleton<App>()
-                                    .AddSingleton<ILoggingService, LoggingService>()
-                                    .AddSingleton<ISlotMachineService, SlotMachineService>()
-                                    .BuildServiceProvider();
+    .Configure<SlotMachineOptions>(options => configuration.GetSection("SlotOptions").Bind(options))
+    .AddSingleton<App>()
+    .AddSingleton<ILoggingService, LoggingService>()
+    .AddSingleton<ISlotMachineService, SlotMachineService>()
+    .BuildServiceProvider();
 
 var app = services.GetRequiredService<App>();
 app.Run();

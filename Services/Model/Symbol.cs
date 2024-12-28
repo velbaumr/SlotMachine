@@ -7,4 +7,3 @@ public enum Symbol
     Bar,
     Wild
 }
-

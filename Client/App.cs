@@ -17,30 +17,31 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
         {
             var result = slotMachineService.Spin();
             var isWin = slotMachineService.IsWin(result.Symbols);
-            
+
             balance = isWin
                 ? balance + userInput.Bet * result.Multiplier
                 : balance - userInput.Bet;
 
             results.Add(result);
-            
+
             var logData = new LogData
             {
                 Result = result,
                 SpinCount = spinCounter,
                 Balance = balance,
-                Bet =  userInput.Bet
+                Bet = userInput.Bet
             };
-            
+
             logService.LogSpinResult(logData);
 
             if (balance < userInput.Bet) break;
         }
-        
+
         var totalWin = balance - userInput.StartBalance;
-        
-        logService.LogSummary(results, slotMachineService.Configuration, totalWin, spinCounter * userInput.Bet, spinCounter, userInput.Bet);
-        
+
+        logService.LogSummary(results, slotMachineService.Configuration, totalWin, spinCounter * userInput.Bet,
+            spinCounter, userInput.Bet);
+
         Console.WriteLine();
         Console.WriteLine("press any key to exit...");
         Console.ReadKey();
@@ -63,13 +64,11 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
 
             if (isValid) continue;
 
-            foreach (var message in validationResult.Errors)
-            {
-                Console.WriteLine(message.ErrorMessage);
-            }
+            foreach (var message in validationResult.Errors) Console.WriteLine(message.ErrorMessage);
         }
+
         Console.WriteLine();
-        
+
         return userInput;
     }
 
@@ -83,12 +82,9 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
             Console.WriteLine(prompt);
             var promptValue = Console.ReadLine();
             parseResult = long.TryParse(promptValue, out result);
-            if (result < minValue)
-            {
-                Console.WriteLine("Please enter a number bigger or equal to {0}", minValue);
-            }
+            if (result < minValue) Console.WriteLine("Please enter a number bigger or equal to {0}", minValue);
         }
-        
+
         return result;
     }
 }

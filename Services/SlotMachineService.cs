@@ -4,18 +4,18 @@ using Services.Model;
 
 namespace Services;
 
-public class SlotMachineService: ISlotMachineService
+public class SlotMachineService : ISlotMachineService
 {
     private readonly IEnumerable<Reel> _reels;
-    private readonly IEnumerable<Multiplier> _multipliers;
+
     public SlotMachineService(IOptions<SlotMachineOptions> options)
     {
-            _reels = (options.Value.Reels ?? throw new ConfigurationException())
-                .Select(r => new Reel(r)).ToList();
-            _multipliers = (options.Value.Multipliers ?? throw new ConfigurationException())
-                .Select(p => p).ToList();
+        _reels = (options.Value.Reels ?? throw new ConfigurationException())
+            .Select(r => new Reel(r)).ToList();
+        Configuration = (options.Value.Multipliers ?? throw new ConfigurationException())
+            .Select(p => p).ToList();
     }
-    
+
     public SpinResult Spin()
     {
         var result = _reels
@@ -23,7 +23,7 @@ public class SlotMachineService: ISlotMachineService
             .AsOrdered()
             .Select(x => x.Spin(Guid.NewGuid().GetHashCode()))
             .ToList();
-        
+
         var isWin = IsWin(result);
         var filtered = result.Where(f => f != Symbol.Wild).ToList();
         var winningSymbol = filtered.Count == 0 ? Symbol.Wild : filtered[0];
@@ -33,23 +33,22 @@ public class SlotMachineService: ISlotMachineService
         {
             Symbols = result,
             Multiplier = multiplier,
-            WinningSymbol = isWin ? winningSymbol : null,
+            WinningSymbol = isWin ? winningSymbol : null
         };
     }
 
     public bool IsWin(IEnumerable<Symbol> symbols)
-    { 
+    {
         var filtered = symbols.Where(f => f != Symbol.Wild).ToList();
-        
+
         return filtered.TrueForAll(f => f == filtered[0]) || filtered.Count == 0;
     }
 
-    public IEnumerable<Multiplier> Configuration => _multipliers;
+    public IEnumerable<Multiplier> Configuration { get; }
 
     public long GetMultiplier(Symbol symbol)
     {
-        return _multipliers
+        return Configuration
             .First(y => y.Symbol == symbol).Amount;
     }
-
 }
