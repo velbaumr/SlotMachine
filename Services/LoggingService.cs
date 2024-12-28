@@ -11,9 +11,10 @@ public class LoggingService : ILoggingService
         var win = logData.Result.Multiplier * logData.Bet;
 
         var winString = win == 0
-            ? string.Empty
-            : $"({ToSymbolString(logData.Result.WinningSymbol ?? throw new InvalidDataException())})";
-        var resultText = $"Spin: {logData.SpinCount}, Win: {win} {winString}, Balance: {logData.Balance}";
+            ? "0,"
+            : $"({win} {ToSymbolString(logData.Result.WinningSymbol ?? throw new InvalidDataException())}),";
+        
+        var resultText = $"Spin: {logData.SpinCount}, Win: {winString} Balance: {logData.Balance}";
 
         foreach (var symbolString in logData.Result.Symbols.Select(ToSymbolString))
             builder.Append($"| {symbolString} ");
