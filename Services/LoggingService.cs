@@ -11,7 +11,7 @@ public class LoggingService : ILoggingService
         var win = logData.Result.Payout * logData.Bet;
 
         var winString = win == 0 ? string.Empty : $"({ToSymbolString(GetWinningSymbol(logData.Result.Symbols))})";
-        var resultText = $"Spin: {logData.SpinCount} Win: {win} {winString} Balance: {logData.Balance}";
+        var resultText = $"Spin: {logData.SpinCount}, Win: {win} {winString}, Balance: {logData.Balance}";
         
         foreach (var symbolString in logData.Result.Symbols.Select(ToSymbolString))
         {
@@ -30,6 +30,7 @@ public class LoggingService : ILoggingService
         var filtered = symbols.Where(s => s != Symbol.Wild).ToList();
         return filtered.Count == 0 ? Symbol.Wild : filtered[0];
     }
+    
     private static string ToSymbolString(Symbol symbol)
     {
         return symbol == Symbol.Sevens ? "777" : symbol.ToString();
@@ -37,11 +38,14 @@ public class LoggingService : ILoggingService
 
     public void LogSummary(IEnumerable<SpinResult> spinResults, IEnumerable<Payout> payouts, long totalWin, long totalBet, long totalSpins, long bet)
     {
-        var rtp = (int)(totalBet / (double)totalWin * 100);
+        var rtp = (int)(totalWin / (double)totalBet * 100);
         Console.WriteLine($"RTP: {rtp}%, Spins: {totalSpins}, Total bet: {totalBet}, Total win: {totalWin}");
         Console.WriteLine();
-        var wins = spinResults.Where(x => x.WinningSymbol != null);
-        var groupedWins = wins.GroupBy(x => x.WinningSymbol).ToList();
+   
+        var groupedWins = spinResults
+            .Where(x => x.WinningSymbol != null)
+            .GroupBy(x => x.WinningSymbol)
+            .ToList();
 
         foreach (var payout in payouts)
         {

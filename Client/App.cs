@@ -41,6 +41,7 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
         
         logService.LogSummary(results, slotMachineService.Configuration, totalWin, spinCounter * userInput.Bet, spinCounter, userInput.Bet);
         
+        Console.WriteLine();
         Console.WriteLine("press any key to exit...");
         Console.ReadKey();
     }
@@ -84,7 +85,7 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
             parseResult = long.TryParse(promptValue, out result);
             if (result < minValue)
             {
-                Console.WriteLine("Please enter a number bigger or equal than {0}", minValue);
+                Console.WriteLine("Please enter a number bigger or equal to {0}", minValue);
             }
         }
         

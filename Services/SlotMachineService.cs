@@ -15,6 +15,7 @@ public class SlotMachineService: ISlotMachineService
             _payouts = (options.Value.Payouts ?? throw new ConfigurationException())
                 .Select(p => p).ToList();
     }
+    
     public SpinResult Spin()
     {
         var result = _reels

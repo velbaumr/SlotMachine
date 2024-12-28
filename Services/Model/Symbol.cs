@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace Services.Model;
+﻿namespace Services.Model;
 
 public enum Symbol
 {
