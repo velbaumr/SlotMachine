@@ -7,12 +7,12 @@ namespace Services;
 public class SlotMachineService: ISlotMachineService
 {
     private readonly IEnumerable<Reel> _reels;
-    private readonly IEnumerable<Payout> _payouts;
+    private readonly IEnumerable<Multiplier> _multipliers;
     public SlotMachineService(IOptions<SlotMachineOptions> options)
     {
             _reels = (options.Value.Reels ?? throw new ConfigurationException())
                 .Select(r => new Reel(r)).ToList();
-            _payouts = (options.Value.Payouts ?? throw new ConfigurationException())
+            _multipliers = (options.Value.Multipliers ?? throw new ConfigurationException())
                 .Select(p => p).ToList();
     }
     
@@ -27,12 +27,12 @@ public class SlotMachineService: ISlotMachineService
         var isWin = IsWin(result);
         var filtered = result.Where(f => f != Symbol.Wild).ToList();
         var winningSymbol = filtered.Count == 0 ? Symbol.Wild : filtered[0];
-        var payout = isWin ? CalculatePayout(winningSymbol) : 0;
+        var multiplier = isWin ? GetMultiplier(winningSymbol) : 0;
 
         return new SpinResult
         {
             Symbols = result,
-            Payout = payout,
+            Multiplier = multiplier,
             WinningSymbol = isWin ? winningSymbol : null,
         };
     }
@@ -44,11 +44,11 @@ public class SlotMachineService: ISlotMachineService
         return filtered.TrueForAll(f => f == filtered[0]) || filtered.Count == 0;
     }
 
-    public IEnumerable<Payout> Configuration => _payouts;
+    public IEnumerable<Multiplier> Configuration => _multipliers;
 
-    public long CalculatePayout(Symbol symbol)
+    public long GetMultiplier(Symbol symbol)
     {
-        return _payouts
+        return _multipliers
             .First(y => y.Symbol == symbol).Amount;
     }
 

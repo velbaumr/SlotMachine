@@ -6,5 +6,5 @@ public class SpinResult
     
     public Symbol? WinningSymbol { get; set; }
     
-    public long Payout { get; set; }
+    public long Multiplier { get; set; }
 }

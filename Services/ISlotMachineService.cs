@@ -6,9 +6,9 @@ public interface ISlotMachineService
 {
     SpinResult Spin();
     
-    long CalculatePayout(Symbol symbol);
+    long GetMultiplier(Symbol symbol);
 
     bool IsWin(IEnumerable<Symbol> symbols);
     
-    IEnumerable<Payout> Configuration { get; }
+    IEnumerable<Multiplier> Configuration { get; }
 }

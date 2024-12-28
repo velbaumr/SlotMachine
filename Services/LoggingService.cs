@@ -8,9 +8,9 @@ public class LoggingService : ILoggingService
     public void LogSpinResult(LogData logData)
     {
         var builder = new StringBuilder();
-        var win = logData.Result.Payout * logData.Bet;
+        var win = logData.Result.Multiplier * logData.Bet;
 
-        var winString = win == 0 ? string.Empty : $"({ToSymbolString(GetWinningSymbol(logData.Result.Symbols))})";
+        var winString = win == 0 ? string.Empty : $"({ToSymbolString(logData.Result.WinningSymbol ?? throw new InvalidDataException())})";
         var resultText = $"Spin: {logData.SpinCount}, Win: {win} {winString}, Balance: {logData.Balance}";
         
         foreach (var symbolString in logData.Result.Symbols.Select(ToSymbolString))
@@ -25,18 +25,12 @@ public class LoggingService : ILoggingService
         Console.WriteLine();
     }
 
-    private static Symbol GetWinningSymbol(IEnumerable<Symbol> symbols)
-    {
-        var filtered = symbols.Where(s => s != Symbol.Wild).ToList();
-        return filtered.Count == 0 ? Symbol.Wild : filtered[0];
-    }
-    
     private static string ToSymbolString(Symbol symbol)
     {
         return symbol == Symbol.Sevens ? "777" : symbol.ToString();
     }
 
-    public void LogSummary(IEnumerable<SpinResult> spinResults, IEnumerable<Payout> payouts, long totalWin, long totalBet, long totalSpins, long bet)
+    public void LogSummary(IEnumerable<SpinResult> spinResults, IEnumerable<Multiplier> payouts, long totalWin, long totalBet, long totalSpins, long bet)
     {
         var rtp = (int)(totalWin / (double)totalBet * 100);
         Console.WriteLine($"RTP: {rtp}%, Spins: {totalSpins}, Total bet: {totalBet}, Total win: {totalWin}");

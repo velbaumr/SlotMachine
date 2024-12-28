@@ -1,6 +1,6 @@
 ﻿namespace Services.Model;
 
-public class Payout
+public class Multiplier
 {
     public Symbol Symbol { get; set; }
     

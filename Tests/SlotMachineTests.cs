@@ -35,23 +35,23 @@ public class SlotMachineTests
                     Symbol.Cherry, Symbol.Bar, Symbol.Wild
                 }
             ],
-            Payouts = [
-                new Payout
+            Multipliers = [
+                new Multiplier
                 {
                     Symbol   = Symbol.Bar,
                     Amount = 1
                 },
-                new Payout
+                new Multiplier
                 {
                     Symbol = Symbol.Cherry,
                     Amount = 18
                 },
-                new Payout
+                new Multiplier
                 {
                     Symbol = Symbol.Sevens,
                     Amount = 50
                 },
-                new Payout
+                new Multiplier
                 {
                     Symbol = Symbol.Wild,
                     Amount = 100
@@ -73,11 +73,11 @@ public class SlotMachineTests
         InlineData(Symbol.Sevens, 50),
         InlineData(Symbol.Wild, 100)
     ]
-    public void ItShouldCalculatePayout(Symbol symbol, long excepted)
+    public void ItShouldGetMultiplier(Symbol symbol, long excepted)
     {
         var slotMachine = CreateSlotMachine();
         
-        var result =slotMachine.CalculatePayout(symbol);
+        var result =slotMachine.GetMultiplier(symbol);
         Assert.Equal(excepted, result);
     }
 

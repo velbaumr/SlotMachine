@@ -19,7 +19,7 @@ public class App(ILoggingService logService, ISlotMachineService slotMachineServ
             var isWin = slotMachineService.IsWin(result.Symbols);
             
             balance = isWin
-                ? balance + userInput.Bet * result.Payout
+                ? balance + userInput.Bet * result.Multiplier
                 : balance - userInput.Bet;
 
             results.Add(result);
